@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olaves Bienes Raíces – Catálogo</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1A3C5E; --blue: #2E6DA4; --gold: #C9A227; --gold-light: #F0D060;
+  --red: #C0392B; --red-bg: #FEF2F2; --green: #1A7A4A; --green-bg: #F0FDF4;
+  --new-bg: #EFF6FF; --light: #F4F7FB; --white: #FFFFFF;
+  --gray: #6B7280; --border: #E5E9EF; --text: #1C2B3A;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: #EEF2F7; color: var(--text); }
+
+/* ── HEADER ── */
+header {
+  background: linear-gradient(135deg, #0F2640 0%, var(--navy) 60%, #1E4A7A 100%);
+  position: relative; overflow: hidden;
+}
+header::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 80% 50%, rgba(201,162,39,0.08) 0%, transparent 60%);
+}
+header::after { content: ''; display: block; height: 4px; background: linear-gradient(90deg, var(--gold), #F0D060, var(--gold)); }
+.header-inner {
+  max-width: 1200px; margin: 0 auto; padding: 32px 40px;
+  display: flex; align-items: center; gap: 28px; position: relative;
+}
+.logo-mark {
+  width: 64px; height: 64px; border-radius: 14px;
+  background: linear-gradient(135deg, var(--gold), #E8B820);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--navy);
+  font-weight: 900; flex-shrink: 0; cursor: pointer; user-select: none;
+  box-shadow: 0 4px 20px rgba(201,162,39,0.3);
+  transition: transform 0.15s;
+}
+.logo-mark:active { transform: scale(0.95); }
+.header-text h1 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--white); letter-spacing: -0.5px; }
+.header-text p { color: var(--gold); font-size: 0.8rem; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; margin-top: 4px; }
+.header-stats { margin-left: auto; display: flex; gap: 16px; }
+.stat { background: rgba(255,255,255,0.06); border: 1px solid rgba(201,162,39,0.25); border-radius: 10px; padding: 12px 20px; text-align: center; }
+.stat strong { display: block; font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--gold); line-height: 1; }
+.stat span { font-size: 0.7rem; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 1px; }
+
+/* ── FILTERS ── */
+.toolbar { max-width: 1200px; margin: 28px auto 0; padding: 0 40px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.filter-btn {
+  padding: 8px 20px; border-radius: 50px; border: 2px solid var(--border);
+  background: var(--white); cursor: pointer; font-family: 'DM Sans', sans-serif;
+  font-size: 0.83rem; font-weight: 500; color: var(--gray); transition: all 0.18s;
+}
+.filter-btn:hover { border-color: var(--blue); color: var(--blue); }
+.filter-btn.active { border-color: var(--navy); background: var(--navy); color: var(--white); }
+.search-box {
+  margin-left: auto; padding: 8px 16px 8px 38px; border-radius: 50px;
+  border: 2px solid var(--border); font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+  background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236B7280' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E") no-repeat 12px center;
+  outline: none; transition: border-color 0.2s; width: 220px;
+}
+.search-box:focus { border-color: var(--blue); }
+
+/* ── GRID ── */
+.grid { max-width: 1200px; margin: 24px auto 60px; padding: 0 40px; display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
+
+/* ── CARD ── */
+.card {
+  background: var(--white); border-radius: 18px; overflow: hidden;
+  box-shadow: 0 2px 16px rgba(26,60,94,0.07); transition: transform 0.2s, box-shadow 0.2s;
+  border: 1.5px solid var(--border); display: flex; flex-direction: column;
+  animation: fadeUp 0.4s ease both;
+}
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+.card:hover { transform: translateY(-5px); box-shadow: 0 12px 32px rgba(26,60,94,0.13); }
+.card.vendida { opacity: 0.6; }
+.card.nueva { border-color: rgba(46,109,164,0.35); }
+
+.card-img {
+  position: relative; height: 210px; overflow: hidden;
+  background: linear-gradient(135deg, #D6E4F0, #EAF4FB);
+}
+.card-img img { width: 100%; height: 100%; object-fit: cover; }
+.no-photo {
+  width: 100%; height: 100%; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 8px;
+  color: #9CA3AF; font-size: 2.5rem;
+}
+.no-photo span { font-size: 0.78rem; color: #C4CDD6; font-weight: 500; }
+.badge {
+  position: absolute; top: 12px; left: 12px; padding: 5px 13px;
+  border-radius: 50px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.8px;
+  text-transform: uppercase; backdrop-filter: blur(10px);
+}
+.badge-nueva { background: rgba(46,109,164,0.88); color: white; }
+.badge-disponible { background: rgba(26,122,74,0.88); color: white; }
+.badge-vendida { background: rgba(192,57,43,0.88); color: white; }
+
+.card-body { padding: 20px 22px 22px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.card-body h2 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--navy); line-height: 1.35; }
+.colonia { font-size: 0.8rem; color: var(--gray); display: flex; gap: 5px; align-items: flex-start; line-height: 1.5; }
+.precio { font-family: 'Playfair Display', serif; font-size: 1.55rem; font-weight: 700; color: var(--green); letter-spacing: -0.5px; }
+.card.vendida .precio { color: var(--red); text-decoration: line-through; opacity: 0.7; }
+.specs { display: flex; flex-wrap: wrap; gap: 6px; }
+.spec { background: var(--light); border: 1px solid var(--border); border-radius: 7px; padding: 4px 10px; font-size: 0.76rem; color: var(--navy); font-weight: 600; }
+.pago { font-size: 0.78rem; color: var(--gray); line-height: 1.6; }
+.obs { margin-top: auto; font-size: 0.78rem; color: #92400E; background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 8px; padding: 8px 12px; line-height: 1.5; }
+.card.vendida .obs { background: var(--red-bg); border-color: #FECACA; color: var(--red); font-weight: 600; }
+
+/* ── EMPTY STATE ── */
+.empty { grid-column: 1/-1; text-align: center; padding: 80px 20px; color: var(--gray); }
+.empty div { font-size: 3rem; margin-bottom: 16px; }
+
+/* ── ADMIN OVERLAY ── */
+#admin-overlay {
+  display: none; position: fixed; inset: 0; z-index: 1000;
+  background: rgba(10,24,38,0.7); backdrop-filter: blur(6px);
+  align-items: center; justify-content: center;
+}
+#admin-overlay.show { display: flex; }
+.admin-panel {
+  background: var(--white); border-radius: 20px; width: 90%; max-width: 680px;
+  max-height: 90vh; overflow-y: auto; box-shadow: 0 24px 80px rgba(0,0,0,0.3);
+  animation: slideIn 0.25s ease;
+}
+@keyframes slideIn { from { opacity:0; transform:scale(0.95) translateY(20px); } to { opacity:1; transform:scale(1) translateY(0); } }
+.panel-header {
+  padding: 24px 28px 20px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; background: var(--white); z-index: 1; border-radius: 20px 20px 0 0;
+}
+.panel-header h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--navy); }
+.close-btn { width: 34px; height: 34px; border-radius: 50%; border: none; background: var(--light); cursor: pointer; font-size: 1.1rem; color: var(--gray); display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+.close-btn:hover { background: var(--border); }
+.panel-body { padding: 24px 28px; }
+
+/* ── LOGIN ── */
+.login-box { text-align: center; padding: 20px 0 10px; }
+.login-box p { color: var(--gray); font-size: 0.9rem; margin-bottom: 20px; }
+.pw-input {
+  width: 100%; padding: 12px 16px; border: 2px solid var(--border); border-radius: 10px;
+  font-family: 'DM Sans', sans-serif; font-size: 1rem; outline: none;
+  transition: border-color 0.2s; text-align: center; letter-spacing: 4px;
+}
+.pw-input:focus { border-color: var(--blue); }
+.pw-error { color: var(--red); font-size: 0.82rem; margin-top: 8px; display: none; }
+
+/* ── TABS ── */
+.tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 24px; }
+.tab { padding: 10px 20px; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: var(--gray); border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.15s; }
+.tab.active { color: var(--navy); border-bottom-color: var(--navy); }
+
+/* ── PROPERTY LIST ── */
+.prop-list { display: flex; flex-direction: column; gap: 10px; }
+.prop-item {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+  border: 1.5px solid var(--border); border-radius: 12px; transition: border-color 0.15s;
+}
+.prop-item:hover { border-color: var(--blue); }
+.prop-item.vendida-item { opacity: 0.55; }
+.prop-info { flex: 1; min-width: 0; }
+.prop-info strong { font-size: 0.88rem; color: var(--navy); display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.prop-info span { font-size: 0.78rem; color: var(--gray); }
+.prop-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.btn-icon { padding: 6px 12px; border-radius: 8px; border: 1.5px solid var(--border); background: var(--white); cursor: pointer; font-size: 0.75rem; font-weight: 600; transition: all 0.15s; white-space: nowrap; }
+.btn-edit { color: var(--blue); } .btn-edit:hover { background: #EFF6FF; border-color: var(--blue); }
+.btn-sell { color: var(--red); } .btn-sell:hover { background: var(--red-bg); border-color: var(--red); }
+.btn-restore { color: var(--green); } .btn-restore:hover { background: var(--green-bg); border-color: var(--green); }
+.btn-del { color: #9CA3AF; } .btn-del:hover { background: #F3F4F6; border-color: #9CA3AF; }
+
+/* ── FORM ── */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group.full { grid-column: 1/-1; }
+.form-group label { font-size: 0.78rem; font-weight: 600; color: var(--navy); text-transform: uppercase; letter-spacing: 0.5px; }
+.form-group input, .form-group select, .form-group textarea {
+  padding: 10px 13px; border: 2px solid var(--border); border-radius: 9px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none;
+  transition: border-color 0.2s; background: var(--white);
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--blue); }
+.form-group textarea { resize: vertical; min-height: 70px; }
+
+/* ── BUTTONS ── */
+.btn-primary {
+  width: 100%; padding: 13px; border-radius: 10px; border: none;
+  background: linear-gradient(135deg, var(--navy), var(--blue));
+  color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+  font-weight: 600; cursor: pointer; transition: opacity 0.2s; margin-top: 8px;
+}
+.btn-primary:hover { opacity: 0.9; }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-secondary {
+  width: 100%; padding: 11px; border-radius: 10px; border: 2px solid var(--border);
+  background: var(--white); color: var(--gray); font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.15s; margin-top: 6px;
+}
+.btn-secondary:hover { border-color: var(--gray); color: var(--text); }
+
+/* ── TOAST ── */
+#toast {
+  position: fixed; bottom: 28px; right: 28px; padding: 14px 22px;
+  background: var(--navy); color: var(--white); border-radius: 12px; font-size: 0.88rem;
+  font-weight: 500; box-shadow: 0 8px 24px rgba(0,0,0,0.2); z-index: 2000;
+  transform: translateY(80px); opacity: 0; transition: all 0.3s ease; pointer-events: none;
+}
+#toast.show { transform: translateY(0); opacity: 1; }
+#toast.success { background: var(--green); }
+#toast.error { background: var(--red); }
+
+/* ── BIN SETUP ── */
+.bin-setup { background: #FFFBEB; border: 1.5px solid #FDE68A; border-radius: 12px; padding: 16px; margin-bottom: 20px; font-size: 0.83rem; color: #92400E; line-height: 1.6; }
+.bin-id-display { background: var(--light); border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 14px; font-family: monospace; font-size: 0.8rem; word-break: break-all; margin: 8px 0; color: var(--navy); }
+
+/* ── FOOTER ── */
+footer { background: var(--navy); color: rgba(255,255,255,0.45); text-align: center; padding: 20px; font-size: 0.78rem; }
+footer strong { color: var(--gold); }
+
+@media (max-width: 640px) {
+  .header-inner { padding: 20px; flex-wrap: wrap; }
+  .header-stats { display: none; }
+  .toolbar { padding: 0 16px; }
+  .grid { padding: 0 16px; grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+  .search-box { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-mark" id="logo-trigger" title="Admin">O</div>
+    <div class="header-text">
+      <h1>Olaves Bienes Raíces</h1>
+      <p>Ciudad Juárez, Chihuahua</p>
+    </div>
+    <div class="header-stats">
+      <div class="stat"><strong id="stat-total">–</strong><span>Total</span></div>
+      <div class="stat"><strong id="stat-disp">–</strong><span>Disponibles</span></div>
+      <div class="stat"><strong id="stat-vend">–</strong><span>Vendidas</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <button class="filter-btn active" onclick="setFilter('todas',this)">Todas</button>
+  <button class="filter-btn" onclick="setFilter('disponible',this)">✅ Disponibles</button>
+  <button class="filter-btn" onclick="setFilter('nueva',this)">🆕 Nuevas</button>
+  <button class="filter-btn" onclick="setFilter('vendida',this)">🔴 Vendidas</button>
+  <input class="search-box" id="search" placeholder="Buscar propiedad..." oninput="renderCards()">
+</div>
+
+<div class="grid" id="grid"></div>
+
+<footer><strong>Olaves Bienes Raíces</strong> — Ciudad Juárez, Chihuahua · Todos los derechos reservados</footer>
+
+<!-- ADMIN OVERLAY -->
+<div id="admin-overlay">
+  <div class="admin-panel">
+    <div class="panel-header">
+      <h2 id="panel-title">🔐 Administrador</h2>
+      <button class="close-btn" onclick="closeAdmin()">✕</button>
+    </div>
+    <div class="panel-body" id="panel-body"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────────────────────
+const MASTER_KEY = '$2a$10$YoFKW2dJ9tOJnKoh36xzUOu9CZ4n8HUk5aJhESlolCtVHcgxv1Hni';
+const ADMIN_PASS = 'Olaves2026';
+const BIN_KEY    = 'olaves_bin_id';
+
+// ── DEFAULT DATA ─────────────────────────────────────────────────────────────
+const DEFAULT_PROPS = [
+  {id:1,status:'nueva',modelo:'MIRABELL – Punta Vela',colonia:'Fracc. Punta Vela (Blvd 4 Siglos / Ramón Rayón)',precio:'$2,820,000',precioNum:2820000,rec:'3',banos:'2.5',m2t:'131.25',m2c:'106.92',pago:'Infonavit, Cofinavit, Fovissste, Hipotecario, Nómina Americana, Contado',obs:'Desc. $70,000 con apartado',img:'',fechaIngreso:'27/03/2025',fechaVenta:'',vendidoA:''},
+  {id:2,status:'nueva',modelo:'CELTA – Punta Vela',colonia:'Fracc. Punta Vela (Blvd 4 Siglos / Ramón Rayón)',precio:'$3,385,000',precioNum:3385000,rec:'3',banos:'3.5',m2t:'140',m2c:'147',pago:'Infonavit, Cofinavit, Fovissste, Hipotecario, Nómina Americana, Contado',obs:'Desc. $125,000 con apartado',img:'',fechaIngreso:'27/03/2025',fechaVenta:'',vendidoA:''},
+  {id:3,status:'nueva',modelo:'ALPE – Punta Vela',colonia:'Fracc. Punta Vela (Blvd 4 Siglos / Ramón Rayón)',precio:'$3,370,000',precioNum:3370000,rec:'3',banos:'-',m2t:'-',m2c:'-',pago:'Infonavit, Cofinavit, Fovissste, Hipotecario, Nómina Americana, Contado',obs:'Desc. $125,000 con apartado',img:'',fechaIngreso:'27/03/2025',fechaVenta:'',vendidoA:''},
+  {id:4,status:'nueva',modelo:'ARGEMA PLUS – KALI Etapa 2',colonia:'KALI Residencial (5 min Puente Zaragoza / Plaza Sendero)',precio:'$3,086,000',precioNum:3086000,rec:'3',banos:'2.5',m2t:'133',m2c:'149.87',pago:'Infonavit',obs:'A/C + Calefacción + Cocina integral incluidos. Avalúo $2,950,000',img:'',fechaIngreso:'27/03/2025',fechaVenta:'',vendidoA:''},
+  {id:5,status:'nueva',modelo:'ARGOS PLUS – KALI Etapa 1',colonia:'KALI Residencial (5 min Puente Zaragoza / Plaza Sendero)',precio:'$3,260,250',precioNum:3260250,rec:'3',banos:'2.5',m2t:'133',m2c:'170.5',pago:'Infonavit',obs:'Clóset vestidor. Avalúo $3,500,000',img:'',fechaIngreso:'27/03/2025',fechaVenta:'',vendidoA:''},
+  {id:6,status:'nueva',modelo:'ARGOS PLUS – KALI Etapa 2',colonia:'KALI Residencial (5 min Puente Zaragoza / Plaza Sendero)',precio:'$3,383,000',precioNum:3383000,rec:'3',banos:'2.5',m2t:'133',m2c:'170.5',pago:'Infonavit',obs:'Clóset vestidor. Avalúo $3,500,000',img:'',fechaIngreso:'27/03/2025',fechaVenta:'',vendidoA:''},
+  {id:7,status:'nueva',modelo:'Belisa Residencial – Calle Júpiter',colonia:'Fracc. Belisa Residencial, Camino Viejo a Zaragoza',precio:'$3,335,000',precioNum:3335000,rec:'3',banos:'2.5',m2t:'152',m2c:'149',pago:'Infonavit, Cofinavit, Fovissste, Hipotecario, Nómina Americana, Contado',obs:'Bono $100,000 + Cocina integral GRATIS. Avalúo $3,500,000',img:'',fechaIngreso:'27/03/2025',fechaVenta:'',vendidoA:''},
+  {id:8,status:'nueva',modelo:'Riveras del Bravo Etapa 7 – Almeja',colonia:'Riveras del Bravo Etapa 7, calle Almeja',precio:'$1,200,000',precioNum:1200000,rec:'3',banos:'2',m2t:'-',m2c:'-',pago:'Infonavit (todas modalidades), Contado',obs:'Recién remodelada, lista para escriturar. Tel: (656)638-0959',img:'',fechaIngreso:'28/03/2025',fechaVenta:'',vendidoA:''},
+  {id:9,status:'nueva',modelo:'Riveras del Bravo Etapa 5 – Rivera del Cañón',colonia:'Riveras del Bravo Etapa 5, calle Rivera del Cañón',precio:'$1,300,000',precioNum:1300000,rec:'3',banos:'1',m2t:'-',m2c:'-',pago:'Infonavit (todas las modalidades)',obs:'Recién remodelada, lista para escriturar. Tel: (656)638-0959',img:'',fechaIngreso:'28/03/2025',fechaVenta:'',vendidoA:''},
+  {id:10,status:'nueva',modelo:'Casa Ampliada – Parajes del Sol',colonia:'Parajes del Sol, Palacio de Mitla / Humaritza',precio:'$2,100,000',precioNum:2100000,rec:'4',banos:'-',m2t:'120',m2c:'240.84',pago:'Fovissste, Contado',obs:'Muy ampliada 2 plantas, cochera 2 autos',img:'',fechaIngreso:'28/03/2025',fechaVenta:'',vendidoA:''},
+  {id:11,status:'nueva',modelo:'Col. Unidad Frontera 2 – 4 Rec.',colonia:'Col. Unidad Frontera 2, Área San Lorenzo',precio:'$3,350,000',precioNum:3350000,rec:'4',banos:'2.5',m2t:'128',m2c:'210',pago:'Infonavit, Fovissste, Hipotecario, Contado',obs:'Comisión $20,000. Gastos escrituración incluidos',img:'',fechaIngreso:'07/05/2026',fechaVenta:'',vendidoA:''},
+  {id:12,status:'nueva',modelo:'Las Haciendas – Hacienda Río Florido',colonia:'Fracc. Las Haciendas, calle Hacienda Río Florido',precio:'$1,300,000',precioNum:1300000,rec:'2',banos:'1',m2t:'-',m2c:'-',pago:'Infonavit individual, Créditos unidos',obs:'Comisión $7,000. Gastos escrituración incluidos',img:'',fechaIngreso:'08/05/2026',fechaVenta:'',vendidoA:''},
+  {id:13,status:'nueva',modelo:'Sierra Vista – Hacienda Romano',colonia:'Fracc. Sierra Vista, calle Hacienda Romano',precio:'$1,290,000',precioNum:1290000,rec:'2',banos:'1',m2t:'120.27',m2c:'72',pago:'Infonavit',obs:'Avalúo GRATIS. Comisión $10,000. Nueva, entrega inmediata',img:'',fechaIngreso:'09/05/2026',fechaVenta:'',vendidoA:''},
+  {id:14,status:'vendida',modelo:'Las Haciendas – Hacienda de Batopilas',colonia:'Fracc. Las Haciendas, calle Hacienda de Batopilas',precio:'$1,400,000',precioNum:1400000,rec:'3',banos:'2',m2t:'-',m2c:'-',pago:'Infonavit individual, Créditos unidos',obs:'Comisión $10,000. Gastos escrituración GRATIS',img:'',fechaIngreso:'09/05/2026',fechaVenta:'10/05/2026',vendidoA:'María Belén Priego León'},
+];
+
+// ── STATE ────────────────────────────────────────────────────────────────────
+let properties = JSON.parse(JSON.stringify(DEFAULT_PROPS));
+let currentFilter = 'todas';
+let adminLoggedIn = false;
+let editingId = null;
+let currentTab = 'list';
+let logoClicks = 0, logoTimer = null;
+
+// ── JSONBIN ──────────────────────────────────────────────────────────────────
+function getBinId() { return localStorage.getItem(BIN_KEY) || ''; }
+function setBinId(id) { localStorage.setItem(BIN_KEY, id); }
+
+async function loadFromCloud() {
+  const binId = getBinId();
+  if (!binId) return;
+  try {
+    const r = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
+      headers: { 'X-Master-Key': MASTER_KEY }
+    });
+    if (!r.ok) return;
+    const d = await r.json();
+    if (d.record && Array.isArray(d.record)) { properties = d.record; renderCards(); updateStats(); }
+  } catch(e) { console.warn('Cloud load failed:', e); }
+}
+
+async function saveToCloud(showMsg = true) {
+  const binId = getBinId();
+  try {
+    let r, url, method;
+    if (!binId) {
+      url = 'https://api.jsonbin.io/v3/b';
+      method = 'POST';
+    } else {
+      url = `https://api.jsonbin.io/v3/b/${binId}`;
+      method = 'PUT';
+    }
+    r = await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json', 'X-Master-Key': MASTER_KEY, 'X-Bin-Name': 'olaves-inventario', 'X-Bin-Private': 'false' },
+      body: JSON.stringify(properties)
+    });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const d = await r.json();
+    if (!binId) {
+      const newId = d.metadata?.id || d.record?.id;
+      if (newId) { setBinId(newId); }
+    }
+    if (showMsg) toast('✅ Guardado en la nube', 'success');
+  } catch(e) {
+    console.error(e);
+    if (showMsg) toast('⚠️ Error al guardar: ' + e.message, 'error');
+  }
+}
+
+// ── RENDER ───────────────────────────────────────────────────────────────────
+function updateStats() {
+  const total = properties.length;
+  const disp  = properties.filter(p => p.status !== 'vendida').length;
+  const vend  = properties.filter(p => p.status === 'vendida').length;
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-disp').textContent  = disp;
+  document.getElementById('stat-vend').textContent  = vend;
+}
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCards();
+}
+
+function renderCards() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const grid = document.getElementById('grid');
+  const filtered = properties.filter(p => {
+    if (currentFilter !== 'todas' && p.status !== currentFilter) return false;
+    if (q && !`${p.modelo} ${p.colonia} ${p.precio}`.toLowerCase().includes(q)) return false;
+    return true;
+  });
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="empty"><div>🏠</div>No se encontraron propiedades</div>';
+    return;
+  }
+  grid.innerHTML = filtered.map((p, i) => `
+    <div class="card ${p.status}" style="animation-delay:${i*0.05}s">
+      <div class="card-img">
+        ${p.img ? `<img src="${p.img}" alt="${p.modelo}" loading="lazy">` : `<div class="no-photo">🏠<span>Sin foto</span></div>`}
+        <span class="badge badge-${p.status}">${{nueva:'🆕 Nueva',disponible:'✅ Disponible',vendida:'🔴 Vendida'}[p.status]||p.status}</span>
+      </div>
+      <div class="card-body">
+        <h2>${p.modelo}</h2>
+        <p class="colonia">📍 ${p.colonia}</p>
+        <div class="precio">${p.precio}</div>
+        <div class="specs">
+          ${p.rec !== '-' ? `<span class="spec">🛏 ${p.rec} Rec.</span>` : ''}
+          ${p.banos !== '-' ? `<span class="spec">🚿 ${p.banos} Baño(s)</span>` : ''}
+          ${p.m2t !== '-' ? `<span class="spec">📐 ${p.m2t}m² terreno</span>` : ''}
+          ${p.m2c !== '-' ? `<span class="spec">🏗 ${p.m2c}m² const.</span>` : ''}
+        </div>
+        <p class="pago">💳 ${p.pago}</p>
+        ${p.status === 'vendida' && p.vendidoA ? `<div class="obs">🔴 Vendida a: ${p.vendidoA}${p.fechaVenta ? ' · ' + p.fechaVenta : ''}</div>` : p.obs ? `<div class="obs">📝 ${p.obs}</div>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+// ── ADMIN ────────────────────────────────────────────────────────────────────
+document.getElementById('logo-trigger').addEventListener('click', () => {
+  logoClicks++;
+  clearTimeout(logoTimer);
+  if (logoClicks >= 3) { logoClicks = 0; openAdmin(); }
+  else { logoTimer = setTimeout(() => logoClicks = 0, 1200); }
+});
+
+function openAdmin() {
+  document.getElementById('admin-overlay').classList.add('show');
+  if (!adminLoggedIn) showLogin();
+  else showAdminPanel();
+}
+function closeAdmin() {
+  document.getElementById('admin-overlay').classList.remove('show');
+}
+document.getElementById('admin-overlay').addEventListener('click', e => { if (e.target === document.getElementById('admin-overlay')) closeAdmin(); });
+
+function showLogin() {
+  document.getElementById('panel-title').textContent = '🔐 Acceso Admin';
+  document.getElementById('panel-body').innerHTML = `
+    <div class="login-box">
+      <p>Ingresa la contraseña para administrar el inventario</p>
+      <input class="pw-input" type="password" id="pw-field" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPass()">
+      <p class="pw-error" id="pw-error">Contraseña incorrecta</p>
+      <button class="btn-primary" onclick="checkPass()" style="margin-top:16px">Entrar</button>
+    </div>`;
+  setTimeout(() => document.getElementById('pw-field')?.focus(), 100);
+}
+
+function checkPass() {
+  const val = document.getElementById('pw-field').value;
+  if (val === ADMIN_PASS) { adminLoggedIn = true; showAdminPanel(); }
+  else { document.getElementById('pw-error').style.display = 'block'; document.getElementById('pw-field').value = ''; }
+}
+
+function showAdminPanel() {
+  document.getElementById('panel-title').textContent = '⚙️ Panel de Administración';
+  currentTab = 'list';
+  renderAdminPanel();
+}
+
+function renderAdminPanel() {
+  const binId = getBinId();
+  document.getElementById('panel-body').innerHTML = `
+    ${!binId ? `<div class="bin-setup">⚠️ <strong>Primera vez:</strong> Al guardar se creará automáticamente tu base de datos en la nube. El ID se guardará en este navegador.</div>` : ''}
+    <div class="tabs">
+      <div class="tab ${currentTab==='list'?'active':''}" onclick="switchTab('list')">📋 Propiedades (${properties.length})</div>
+      <div class="tab ${currentTab==='add'?'active':''}" onclick="switchTab('add')">➕ Agregar</div>
+    </div>
+    <div id="tab-content"></div>`;
+  renderTabContent();
+}
+
+function switchTab(tab) { currentTab = tab; renderAdminPanel(); }
+
+function renderTabContent() {
+  const el = document.getElementById('tab-content');
+  if (currentTab === 'list') {
+    el.innerHTML = `<div class="prop-list">${properties.map(p => `
+      <div class="prop-item ${p.status==='vendida'?'vendida-item':''}">
+        <div class="prop-info">
+          <strong>${p.modelo}</strong>
+          <span>${p.precio} · ${p.status==='vendida'?'🔴 Vendida':p.status==='nueva'?'🆕 Nueva':'✅ Disponible'}</span>
+        </div>
+        <div class="prop-actions">
+          <button class="btn-icon btn-edit" onclick="editProp(${p.id})">✏️ Editar</button>
+          ${p.status !== 'vendida'
+            ? `<button class="btn-icon btn-sell" onclick="markSold(${p.id})">🔴 Vendida</button>`
+            : `<button class="btn-icon btn-restore" onclick="restoreProp(${p.id})">♻️ Activar</button>`}
+          <button class="btn-icon btn-del" onclick="deleteProp(${p.id})">🗑</button>
+        </div>
+      </div>`).join('')}</div>`;
+  } else if (currentTab === 'add' || currentTab === 'edit') {
+    const p = currentTab === 'edit' ? properties.find(x => x.id === editingId) : null;
+    el.innerHTML = `
+      <div class="form-grid">
+        <div class="form-group full"><label>Modelo / Fraccionamiento *</label><input id="f-modelo" value="${p?.modelo||''}" placeholder="Ej: Casa Las Haciendas – Río Florido"></div>
+        <div class="form-group full"><label>Colonia / Dirección *</label><input id="f-colonia" value="${p?.colonia||''}" placeholder="Fracc. Las Haciendas, calle Hacienda Río Florido"></div>
+        <div class="form-group"><label>Precio *</label><input id="f-precio" value="${p?.precio||''}" placeholder="$1,300,000"></div>
+        <div class="form-group"><label>Estatus</label>
+          <select id="f-status">
+            <option value="nueva" ${(!p||p.status==='nueva')?'selected':''}>🆕 Nueva</option>
+            <option value="disponible" ${p?.status==='disponible'?'selected':''}>✅ Disponible</option>
+            <option value="vendida" ${p?.status==='vendida'?'selected':''}>🔴 Vendida</option>
+          </select></div>
+        <div class="form-group"><label>Recámaras</label><input id="f-rec" value="${p?.rec||''}" placeholder="3"></div>
+        <div class="form-group"><label>Baños</label><input id="f-banos" value="${p?.banos||''}" placeholder="2.5"></div>
+        <div class="form-group"><label>M² Terreno</label><input id="f-m2t" value="${p?.m2t||''}" placeholder="120"></div>
+        <div class="form-group"><label>M² Construcción</label><input id="f-m2c" value="${p?.m2c||''}" placeholder="80"></div>
+        <div class="form-group full"><label>Forma de Pago</label><input id="f-pago" value="${p?.pago||''}" placeholder="Infonavit, Contado..."></div>
+        <div class="form-group full"><label>Observaciones / Comisión</label><textarea id="f-obs">${p?.obs||''}</textarea></div>
+        <div class="form-group full"><label>URL de Foto (opcional)</label><input id="f-img" value="${p?.img||''}" placeholder="https://..."></div>
+        <div class="form-group"><label>Fecha Ingreso</label><input id="f-fi" value="${p?.fechaIngreso||''}" placeholder="dd/mm/aaaa"></div>
+        <div class="form-group"><label>Vendido A</label><input id="f-va" value="${p?.vendidoA||''}" placeholder="Nombre del comprador"></div>
+        <div class="form-group"><label>Fecha Venta</label><input id="f-fv" value="${p?.fechaVenta||''}" placeholder="dd/mm/aaaa"></div>
+      </div>
+      <button class="btn-primary" onclick="saveProp()">${currentTab==='edit'?'💾 Guardar Cambios':'➕ Agregar Propiedad'}</button>
+      <button class="btn-secondary" onclick="switchTab('list')">Cancelar</button>`;
+  }
+}
+
+function editProp(id) { editingId = id; currentTab = 'edit'; renderAdminPanel(); }
+
+async function saveProp() {
+  const modelo  = document.getElementById('f-modelo').value.trim();
+  const colonia = document.getElementById('f-colonia').value.trim();
+  const precio  = document.getElementById('f-precio').value.trim();
+  if (!modelo || !precio) { toast('Modelo y Precio son obligatorios', 'error'); return; }
+  const precioNum = parseFloat(precio.replace(/[$,]/g, '')) || 0;
+  const data = {
+    modelo, colonia, precio, precioNum,
+    status:       document.getElementById('f-status').value,
+    rec:          document.getElementById('f-rec').value || '-',
+    banos:        document.getElementById('f-banos').value || '-',
+    m2t:          document.getElementById('f-m2t').value || '-',
+    m2c:          document.getElementById('f-m2c').value || '-',
+    pago:         document.getElementById('f-pago').value,
+    obs:          document.getElementById('f-obs').value,
+    img:          document.getElementById('f-img').value,
+    fechaIngreso: document.getElementById('f-fi').value,
+    vendidoA:     document.getElementById('f-va').value,
+    fechaVenta:   document.getElementById('f-fv').value,
+  };
+  if (currentTab === 'edit') {
+    const idx = properties.findIndex(p => p.id === editingId);
+    properties[idx] = { ...properties[idx], ...data };
+  } else {
+    data.id = Date.now();
+    properties.push(data);
+  }
+  renderCards(); updateStats();
+  await saveToCloud();
+  switchTab('list');
+}
+
+async function markSold(id) {
+  const p = properties.find(x => x.id === id);
+  const va = prompt(`¿A quién se vendió "${p.modelo}"? (opcional)`);
+  if (va === null) return;
+  const fv = prompt('¿Fecha de venta? (ej: 19/05/2026)') || new Date().toLocaleDateString('es-MX');
+  p.status = 'vendida'; p.vendidoA = va; p.fechaVenta = fv;
+  renderCards(); updateStats(); renderTabContent();
+  await saveToCloud();
+}
+
+async function restoreProp(id) {
+  properties.find(x => x.id === id).status = 'disponible';
+  renderCards(); updateStats(); renderTabContent();
+  await saveToCloud();
+}
+
+async function deleteProp(id) {
+  const p = properties.find(x => x.id === id);
+  if (!confirm(`¿Eliminar "${p.modelo}"?`)) return;
+  properties = properties.filter(x => x.id !== id);
+  renderCards(); updateStats(); renderTabContent();
+  await saveToCloud();
+}
+
+// ── TOAST ────────────────────────────────────────────────────────────────────
+function toast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'show ' + type;
+  setTimeout(() => t.className = '', 3000);
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+window.addEventListener('load', async () => {
+  updateStats();
+  renderCards();
+  await loadFromCloud();
+  updateStats();
+  renderCards();
+});
+</script>
+</body>
+</html>
